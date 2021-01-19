@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+		<title>Lights</title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+
+</head>
+<body>
+
+	<script src="three.js"></script>
+	<script>
+		    var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            var renderer = new THREE.WebGLRenderer({antialias:true});
+			renderer.setClearColor("#919191");
+			renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+
+            camera.position.z = 100;
+            camera.position.y = 20;
+            
+            const groundgeo = new THREE.BoxGeometry(100, 2, 100);
+            const groundmat = new THREE.MeshPhongMaterial({color: 0x101010});
+            const mesh = new THREE.Mesh(groundgeo, groundmat);
+
+            scene.add(mesh);
+
+            const directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
+            scene.add( directionalLight );
+            directionalLight.position.set(100,50,100);
+ //pointlight red intensity 5
+            const pointLight = new THREE.PointLight( 0xFF0000, 5, 100);
+            scene.add(pointLight);
+            pointLight.position.set(0, 20, 0);
+
+            //spotLight 45 degrees green
+            const spotLight = new THREE.SpotLight( 0x00FF00, 7, 0, 45);
+            scene.add(spotLight);
+            spotLight.position.set(0, 20, 0);
+
+            //moving
+            function onDocKeyDown(e){
+            if(e.keyCode == 38){//przod
+      spotLight.position.z += 1;
+      }
+      if(e.keyCode == 40){//tyl
+      spotLight.position.z -= 1;
+      }
+      if(e.keyCode == 37){//lewa
+      spotLight.position.x += 1;
+      }
+      if(e.keyCode == 39){//prawa
+      spotLight.position.x -= 1;
+      }
+    }
+
+
+var render = function() {
+    document.addEventListener('keydown', onDocKeyDown);
+    requestAnimationFrame(render);
+    renderer.render(scene, camera);
+
+}
+render();
+    </script>
+
+</body>
+</html>

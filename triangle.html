@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+		<title>Triangle</title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+
+</head>
+<body>
+
+	<script src="three.js"></script>
+	<script>
+		    var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setClearColor("#919191");
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			var geometry = new THREE.Geometry();
+
+			geometry.vertices.push(
+				new THREE.Vector3( 0,  0, 0 ),
+				new THREE.Vector3( -1, 1, 1),
+				new THREE.Vector3( -2, 0, -1 )
+				
+			);
+
+			geometry.faces.push( new THREE.Face3(1, 2, 3) );
+
+			geometry.computeBoundingSphere();
+			var material = new THREE.MeshBasicMaterial( { color: 0x32a891 } );
+			var triangle = new THREE.Mesh( geometry, material );
+            
+			scene.add( triangle );
+			
+			camera.position.z = 3;
+            
+            renderer.render( scene, camera );
+
+
+	</script>
+
+</body>
+</html>

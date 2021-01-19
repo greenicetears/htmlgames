@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+		<title>Triangle</title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+
+</head>
+<body>
+
+	<script src="three.js"></script>
+	<script>
+		    var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            var renderer = new THREE.WebGLRenderer({antialias:true});
+			renderer.setClearColor("#919191");
+			renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+            
+            const geometry = new THREE.CylinderGeometry( 3, 3, 20, 32 );
+            const cubegeo = new THREE.BoxGeometry(60, 2, 40);
+            const materialt = new THREE.MeshPhongMaterial( {color: 0x402220});
+            const material = new THREE.MeshPhongMaterial( {color: 0xffff00} );
+            const material2 = new THREE.MeshPhongMaterial( {color: 0xff0000} );
+            const material3 = new THREE.MeshPhongMaterial( {color: 0x00ff00} );
+            const material4 = new THREE.MeshPhongMaterial( {color: 0x00ffff} );
+
+            const tabletop = new THREE.Mesh (cubegeo, materialt);
+            const cylinder = new THREE.Mesh( geometry, material );
+            const cylinder2 = new THREE.Mesh( geometry, material2 );
+            const cylinder3 = new THREE.Mesh( geometry, material3 );
+            const cylinder4 = new THREE.Mesh( geometry, material4 );
+
+            cylinder.position.x = 20;
+            cylinder2.position.x= -20;
+            cylinder.position.z = -10;
+            cylinder2.position.z= -10;
+
+            cylinder3.position.x = 20;
+            cylinder3.position.z = 20;
+            cylinder4.position.x= -20;
+            cylinder4.position.z = 20;
+            tabletop.position.z = 5;
+            tabletop.position.y = 10;
+
+            group = new THREE.Object3D();//create an empty container
+            group.add( tabletop );
+            group.add( cylinder );
+            group.add( cylinder2 );
+            group.add( cylinder3 );
+            group.add( cylinder4 );
+scene.add(group);
+
+            camera.position.z = 100;
+            camera.position.y = 20;
+            
+            const directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
+            scene.add( directionalLight );
+            directionalLight.position.set(100,50,100);
+            
+var render = function() {
+    requestAnimationFrame(render);
+    group.rotation.y += 0.01;
+    renderer.render(scene, camera);
+
+}
+render();
+    </script>
+
+</body>
+</html>

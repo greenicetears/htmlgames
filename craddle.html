@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+		<title>Newton Craddle</title>
+		<style>
+			body { margin: 0; 
+            margin-top: -10px;}
+			canvas { display: block; }
+		</style>
+
+</head>
+<body>
+    <div id="wrapper">
+        <div style="position: absolute;
+                    left: 5%; top: 5%;
+                    width:20%; height:30%;
+                    color:black;
+                    font-size: 150%;
+                    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+                    ">
+                    <p id="blue" style="color: blue; font-size:200%"></p> Press "P" to pause 
+                    <br> Press "R" to Resume<br>
+
+        </div>
+    <script src="https://cdnjs.﻿cloudflare.com/ajax/libs/gsap/2.0.1/TweenMax.min.js"></script>﻿
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.1/TimelineMax.min.js"></script>
+    <script src="three.js"></script>
+	<script>
+		    var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            var renderer = new THREE.WebGLRenderer({antialias:true});
+			renderer.setClearColor("#919191");
+			renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+
+            //creating a floor
+            const floorgeo = new THREE.BoxGeometry(400, 1, 400);
+            const floormat = new THREE.MeshLambertMaterial({color: 0x454545});
+            const floor = new THREE.Mesh(floorgeo, floormat);
+
+            //creating a stand for cradle
+            const createLeg = (l = 150) => {
+            const leggeo = new THREE.BoxGeometry(5, 5, l);
+            const legmat = new THREE.MeshLambertMaterial({color: 0x454545});
+            const leg = new THREE.Mesh(leggeo, legmat);
+            return leg;
+            }
+
+            const upgeo = new THREE.BoxGeometry(150, 5, 5);
+            const upmat = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
+            const up = new THREE.Mesh(upgeo, upmat);
+            const leg2 = createLeg(130);
+            const leg3 = createLeg(130);
+            const leg4 = createLeg(130);
+            const leg5 = createLeg(130);
+
+            scene.add(leg2, leg3, leg4, leg5);
+            scene.add(up);
+            up.position.set(-20, 125, 0);
+
+            leg4.rotation.x = 2.0;
+            leg5.rotation.x = -2.0;
+            leg4.position.set(-92, 70, -28);
+            leg5.position.set(-92, 70, 28);
+
+            leg2.rotation.x = 2.0;
+            leg3.rotation.x = -2.0;
+            leg2.position.set(52, 70, -28);
+            leg3.position.set(52, 70, 28);
+
+
+
+
+            //function creating a swing
+            const createSwing = () => {
+            const ballgeo = new THREE.SphereGeometry(10);
+            const ballmat = new THREE.MeshPhongMaterial({color: 0x808000,
+            shininess: 200});
+            const ball1 = new THREE.Mesh(ballgeo, ballmat);
+
+            const ropegeo = new THREE.CylinderGeometry(1, 1, 100, 10);
+            const ropemat = new THREE.MeshStandardMaterial({color: 0xFFFFFF});
+            const rope1 = new THREE.Mesh(ropegeo, ropemat);
+
+            const swing1 = new THREE.Object3D();
+            ballgeo.translate(0, 100, 0);
+            rope1.position.y = 50;
+            swing1.add(rope1, ball1);
+            swing1.rotation.z = 3.14;
+            return swing1
+            }
+
+
+            scene.add(floor);
+
+            const swing1 = createSwing();
+            const swing2 = createSwing();
+            const swing3 = createSwing();
+            const swing4 = createSwing();
+            const swing5 = createSwing();
+            //adding swing
+            scene.add(swing1, swing2, swing3, swing4, swing5);
+
+            swing2.position.set(20, 125, 0);
+            swing3.position.set(-20, 125, 0);
+            swing4.position.set(-40, 125, 0);
+            swing5.position.set(-60, 125, 0);
+
+
+            swing1.position.y = 125;
+            camera.position.set(150, 100, 250);
+            camera.rotation.y = 0.60;
+         
+            const directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
+            scene.add( directionalLight );
+
+            swing2.tl = new TimelineMax({repeat: -1});
+            swing2.tl.to(swing2.rotation, 1, {z: 3.14, },);
+            swing2.tl.to(swing5.rotation, 1, {z: 2.28, },);
+            swing2.tl.to(swing5.rotation, 1, {z: 3.14, },);
+            swing2.tl.to(swing2.rotation, 1, {z: 4.0, },);
+
+
+
+            directionalLight.position.set(100,250,100);
+        swing2.rotation.z = 4.0;
+
+/*   if (keyCode == 38 && swing2.tl.play() == true) {
+   swing2.tl.pause();  }
+    if (keyCode == 38 && swing2.tl.pause() == true) {
+        swing2.tl.play();
+    }
+     */
+    function logKey(e){
+      
+        console.log(e.keyCode);
+        if(e.keyCode == 80){
+        swing2.tl.pause();
+        }
+        if(e.keyCode == 82){
+        swing2.tl.resume();
+        }
+ 
+    }
+    
+            var render = function() {
+                document.addEventListener('keydown', logKey);
+        requestAnimationFrame(render);
+        renderer.render(scene, camera);
+}
+render();
+</script>
+</body>
+</html>
